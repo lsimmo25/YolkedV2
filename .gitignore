@@ -1,0 +1,51 @@
+# Visual Studio
+.vscode/
+.vs/
+*.vscode
+*.vs
+*.suo
+*.user
+*.userossc
+*.sln.docstates
+*.pdb
+*.mdb
+*.opendb
+*.log
+*.vspscc
+*.vssscc
+*.tmp
+*.tmp_proj
+*.log
+*.vsconfig
+*.vcxproj.user
+*.ruleset
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+[Bb]uild/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+
+# NuGet
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+*.dll
+*.exe
+*.config
+*.xml
+project.lock.json
+project.fragment.lock.json
+
+# Others
+*.DS_Store
+*.pyc
+*.class
+.idea/
