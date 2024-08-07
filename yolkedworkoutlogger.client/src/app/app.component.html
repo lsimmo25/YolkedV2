@@ -1,24 +1,29 @@
-﻿<h1 id="tableLabel">Weather forecast</h1>
-
-<p>This component demonstrates fetching data from the server.</p>
-
-<p *ngIf="!forecasts"><em>Loading... Please refresh once the ASP.NET backend has started. See <a href="https://aka.ms/jspsintegrationangular">https://aka.ms/jspsintegrationangular</a> for more details.</em></p>
-
-<table *ngIf="forecasts">
-    <thead>
-        <tr>
-            <th>Date</th>
-            <th>Temp. (C)</th>
-            <th>Temp. (F)</th>
-            <th>Summary</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let forecast of forecasts">
-            <td>{{ forecast.date }}</td>
-            <td>{{ forecast.temperatureC }}</td>
-            <td>{{ forecast.temperatureF }}</td>
-            <td>{{ forecast.summary }}</td>
-        </tr>
-    </tbody>
-</table>
+<div class="container">
+  <header>
+    <nav class="navbar">
+      <div class="navbar-brand">
+        <a routerLink="/" class="dark-text">YOLKED</a>
+      </div>
+      <ul class="navbar-list">
+        <li class="navbar-item">
+          <a routerLink="/workouts" routerLinkActive="active-link">Workouts</a>
+        </li>
+        <li class="navbar-item">
+          <a routerLink="/bodyweight" routerLinkActive="active-link">Bodyweight</a>
+        </li>
+        <li class="navbar-item">
+          <a routerLink="/food" routerLinkActive="active-link">Food</a>
+        </li>
+        <li class="navbar-item">
+          <a routerLink="/profile" routerLinkActive="active-link">Profile</a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <router-outlet></router-outlet> <!-- This is where the routed components will be displayed -->
+  </main>
+  <footer>
+    <p>&copy; 2024 Yolked Workout Logger</p>
+  </footer>
+</div>

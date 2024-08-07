@@ -1,1 +1,110 @@
-/* You can add global styles to this file, and also import other style files */
+/* Import the Roboto font */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+/* Global styles */
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif; /* Use the Roboto font */
+  background-color: #121212; /* Dark background */
+  color: #ffffff; /* Light text */
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+header {
+  background-color: #222; /* Dark background for navbar */
+  color: #fff;
+  padding: 0.5rem 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Add a shadow for depth */
+}
+
+main {
+  flex: 1;
+  padding: 2rem; /* Increased padding for more whitespace */
+}
+
+footer {
+  background-color: #222; /* Match the header color */
+  color: #fff;
+  padding: 0.25rem 1rem;
+  text-align: center;
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2); /* Add a shadow for depth */
+}
+
+/* Navbar Styles */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar-brand a {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ffffff; /* White text for brand */
+  text-decoration: none;
+}
+
+.navbar-list {
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+  margin: 0;
+  gap: 1.5rem; /* Increased gap for better spacing */
+}
+
+.navbar-item a {
+  color: #ffffff; /* White text for links */
+  text-decoration: none;
+  font-weight: 700; /* Bold text for better readability */
+  position: relative; /* For underline effect */
+}
+
+  /* Active link style */
+  .navbar-item a.active-link {
+    color: #ffa500; /* Yolk-orange for active link */
+  }
+
+  /* Hover effect to underline the nav links */
+  .navbar-item a::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    bottom: -2px;
+    left: 0;
+    background-color: #ffa500;
+    visibility: hidden;
+    transform: scaleX(0);
+    transition: all 0.3s ease-in-out;
+  }
+
+  .navbar-item a:hover::after {
+    visibility: visible;
+    transform: scaleX(1);
+  }
+
+/* Button Styles */
+.button {
+  background-color: #ffa500; /* Yolk-orange background for buttons */
+  border: none;
+  padding: 10px 20px;
+  border-radius: 25px; /* Rounded button for a modern look */
+  cursor: pointer;
+  color: #121212; /* Dark text */
+  font-weight: 700;
+  transition: background-color 0.3s;
+}
+
+  .button:hover {
+    background-color: #ff4500; /* Darker orange on hover */
+  }
+
+/* Specific class to make the text white */
+.white-text {
+  color: #ffffff;
+}
