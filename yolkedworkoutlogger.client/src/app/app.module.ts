@@ -9,6 +9,8 @@ import { BodyweightComponent } from './components/bodyweight/bodyweight.componen
 import { FoodComponent } from './components/food/food.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { LoginComponent } from './components/login/login.component';
+import { SignupComponent } from './components/signup/signup.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +21,8 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
     FoodComponent,
     ProfileComponent,
     DashboardComponent,
+    LoginComponent,
+    SignupComponent,
     // Declare other components here if needed
   ],
   imports: [
