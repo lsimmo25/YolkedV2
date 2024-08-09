@@ -4,6 +4,12 @@
     {
         public int Id { get; set; }
         public DateTime Date { get; set; }
-        public List<Exercise> Exercises { get; set; }
+        public List<Exercise> Exercises { get; set; } = new List<Exercise>();
+
+        // Foreign Key
+        public string UserId { get; set; }
+
+        // Navigation Property
+        public User User { get; set; }
     }
 }

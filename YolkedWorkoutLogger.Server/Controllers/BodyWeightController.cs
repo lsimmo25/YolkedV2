@@ -1,12 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using YolkedWorkoutLogger.Server.Models;
 
 namespace YolkedWorkoutLogger.Server.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class BodyWeightController : ControllerBase
@@ -21,14 +23,19 @@ namespace YolkedWorkoutLogger.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> GetBodyWeights()
         {
-            var bodyWeights = await _context.BodyWeights.ToListAsync();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var bodyWeights = await _context.BodyWeights
+                .Where(bw => bw.UserId == userId)
+                .ToListAsync();
             return Ok(bodyWeights);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetBodyWeightById(int id)
         {
-            var bodyWeight = await _context.BodyWeights.FirstOrDefaultAsync(bw => bw.Id == id);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var bodyWeight = await _context.BodyWeights
+                .FirstOrDefaultAsync(bw => bw.Id == id && bw.UserId == userId);
             if (bodyWeight == null)
             {
                 return NotFound();
@@ -39,6 +46,9 @@ namespace YolkedWorkoutLogger.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateBodyWeight([FromBody] BodyWeight bodyWeight)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            bodyWeight.UserId = userId;
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -57,6 +67,12 @@ namespace YolkedWorkoutLogger.Server.Controllers
                 return BadRequest();
             }
 
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (bodyWeight.UserId != userId)
+            {
+                return Unauthorized();
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -69,7 +85,7 @@ namespace YolkedWorkoutLogger.Server.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!_context.BodyWeights.Any(bw => bw.Id == id))
+                if (!_context.BodyWeights.Any(bw => bw.Id == id && bw.UserId == userId))
                 {
                     return NotFound();
                 }
@@ -85,7 +101,9 @@ namespace YolkedWorkoutLogger.Server.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBodyWeight(int id)
         {
-            var bodyWeight = await _context.BodyWeights.FindAsync(id);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var bodyWeight = await _context.BodyWeights
+                .FirstOrDefaultAsync(bw => bw.Id == id && bw.UserId == userId);
             if (bodyWeight == null)
             {
                 return NotFound();

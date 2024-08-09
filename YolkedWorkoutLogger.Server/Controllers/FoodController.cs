@@ -1,12 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using YolkedWorkoutLogger.Server.Models;
 
 namespace YolkedWorkoutLogger.Server.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class FoodController : ControllerBase
@@ -21,14 +23,19 @@ namespace YolkedWorkoutLogger.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> GetFoods()
         {
-            var foods = await _context.Foods.ToListAsync();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var foods = await _context.Foods
+                .Where(f => f.UserId == userId)
+                .ToListAsync();
             return Ok(foods);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetFoodById(int id)
         {
-            var food = await _context.Foods.FirstOrDefaultAsync(s => s.Id == id);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var food = await _context.Foods
+                .FirstOrDefaultAsync(f => f.Id == id && f.UserId == userId);
             if (food == null)
             {
                 return NotFound();
@@ -39,6 +46,9 @@ namespace YolkedWorkoutLogger.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateFood([FromBody] Food food)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            food.UserId = userId;
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -57,6 +67,12 @@ namespace YolkedWorkoutLogger.Server.Controllers
                 return BadRequest();
             }
 
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (food.UserId != userId)
+            {
+                return Unauthorized();
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -69,7 +85,7 @@ namespace YolkedWorkoutLogger.Server.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!_context.Foods.Any(s => s.Id == id))
+                if (!_context.Foods.Any(f => f.Id == id && f.UserId == userId))
                 {
                     return NotFound();
                 }
@@ -85,7 +101,9 @@ namespace YolkedWorkoutLogger.Server.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteFood(int id)
         {
-            var food = await _context.Foods.FindAsync(id);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var food = await _context.Foods
+                .FirstOrDefaultAsync(f => f.Id == id && f.UserId == userId);
             if (food == null)
             {
                 return NotFound();
